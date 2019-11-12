@@ -9,21 +9,8 @@
             <van-tabbar-item icon="setting-o" v-bind:info="value1">标签</van-tabbar-item>
         </van-tabbar>
         -->
-        <van-nav-bar
-                title="客情工单处理"
-                left-text="返回"
-                right-text="按钮"
-                left-arrow
-                fixed
-                @click-left="onClickLeft"
-                @click-right="onClickRight"
-        >
-        <van-icon name="search" slot="right" />
-        </van-nav-bar>
-
-        <section style="height: 46px">
-
-        </section>
+        <v-header />
+        <section style="height: 46px"></section>
 
         <van-collapse v-model="activeNames">
 
@@ -190,6 +177,7 @@
     import {
         Users
     } from '../../api/users.js';
+    import header from '../../components/v-header/v-header.vue'
     export default {
 
         components: {
@@ -224,7 +212,8 @@
             [CollapseItem .name]:CollapseItem,
             [NavBar.name]:NavBar,
             [SwipeCell.name]:SwipeCell,
-            [Notify.name]:Notify
+            [Notify.name]:Notify,
+            'v-header':header
         },
 
         data() {

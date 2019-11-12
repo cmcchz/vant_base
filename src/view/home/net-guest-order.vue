@@ -11,15 +11,116 @@
         -->
         <v-header />
         <section style="height: 46px"></section>
-        <router-view></router-view>
+
+
+        <van-loading color="#1989fa" v-show="save_loading"/>
+
+
+        <van-cell-group>
+
+            <!-- @click="showPopupOut"-->
+            <van-field
+                    v-model="doc.user_name"
+                    required
+                    clearable
+                    label="客户联系人："
+                    left-icon="contact"
+
+            />
+            <van-field
+                    v-model="doc.user_telephone"
+                    required
+                    clearable
+                    type="tel"
+                    label="联系号码："
+                    left-icon="phone-o"
+
+            />
+            <van-field
+                    v-model="doc.type"
+                    required
+                    readonly
+                    left-icon="setting-o"
+                    label="问题类型： "
+                    placeholder="请选择问题类型"
+                    @click="showType = true"
+            />
+            <van-field
+                    v-model="doc.address"
+                    required
+                    clearable
+                    type="textarea"
+                    label="地址："
+                    left-icon="wap-home-o"
+
+            />
+            <van-field
+                    v-model="doc.location"
+                    disabled
+                    clearable
+                    label="经纬度："
+                    left-icon="location-o"
+
+            />
+            <van-field
+                    v-model="doc.content"
+                    required
+                    clearable
+                    autosize
+                    label="问题描述："
+                    type="textarea"
+                    maxlength="100"
+                    placeholder="请输入问题描述"
+                    left-icon="notes-o"
+                    show-word-limit
+            />
+
+        </van-cell-group>
+
+        <van-collapse v-model="activeNames">
+            <van-collapse-item border  name="1">
+                <div slot="title"> 上传图片 </div>
+                <div class="posting_uploader_item" v-for="(item,index) in fileList" :key="index" @click="imgclose">
+                    <img :src="item" alt style="width: 100%;height: 100%">
+                </div>
+                <van-uploader multiple accept="image/*"  :after-read="afterRead">
+                    <van-icon name="plus" size="80px" style="border:1px dotted;"  alt class/>
+                </van-uploader>
+
+            </van-collapse-item>
+        </van-collapse>
+
+        <van-notice-bar wrapable :scrollable="false" left-icon="volume-o">
+            （1）请同意获取定位信息。<br>
+            （2）无客户联系人时，请填写上报人联系信息。
+        </van-notice-bar>
+
+        <section style="height: 10px"></section>
+
+        <van-row>
+            <van-button  size="large" type="primary"  @click="onSave">提交工单</van-button>
+
+        </van-row>
+
+        <section style="height: 100px">
+
+        </section>
         <v-footer />
+
+
+        <van-popup v-model="showType"
+                   position="bottom"
+                   :style="{ height: '50%' }">
+
+            <van-picker show-toolbar title="选择问题类型" :columns="types" @cancel="showType=false" @confirm="onConfirmType"  />
+        </van-popup>
     </div>
 
 
 </template>
 
 <script>
-
+    import uuid from 'uuid';
     import {
         Tag,
         Col,
@@ -408,8 +509,7 @@
             },
             tab(index, val) {
                 this.currIndex = index;
-                //this.$router.push(val);
-                net_router.push(val);
+                this.$router.push(val);
                 /*if(index==0){
                     this.$router.push(val+"?docid="+this.docid);
                 }else

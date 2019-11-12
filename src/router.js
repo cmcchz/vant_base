@@ -108,9 +108,21 @@ const routes = [
     },
     {
         name: 'net-guest-home',
-        component: () => import('./view/home/net-guest-home.vue'),
+        components: { // key => value
+            header: () => import('./components/v-header/v-header.vue'),
+            default: () => import('./view/home/net-guest-order.vue'), //默认省略不写name的情况
+            footer: () => import('./components/v-footer/v-footer.vue')
+        },
         meta: {
-            title: '网络客情管理',
+            title: '网络客情首页',
+            permission: true
+        }
+    },
+    {
+        name: 'net-guest-order',
+        component: () => import('./view/home/net-guest-order.vue'),
+        meta: {
+            title: '网络客情上报',
             permission: true
         }
     },
@@ -126,7 +138,7 @@ const routes = [
         name: 'net-guest-pending',
         component: () => import('./view/home/net-guest-pending.vue'),
         meta: {
-            title: '待办客情工单',
+            title: '待办',
             permission: true
         }
     },

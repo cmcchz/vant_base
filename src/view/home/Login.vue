@@ -129,13 +129,14 @@ export default {
     methods: {
         submitForm() {
 
-            /*localStorage.setItem('ms_username', this.param.username);
-            this.$router.push("/net-guest-home")*/
+            localStorage.setItem('ms_username', this.param.username);
+            this.$router.push("/net-guest-home")
 
 
-            if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
+            /*if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
 
                 localStorage.setItem('ms_username', this.param.username);
+                localStorage.setItem('user', this.param.username);
 
                 this.$router.push("/net-guest-home")
             } else {
@@ -144,7 +145,7 @@ export default {
                 //console.log('error submit!!');
                 Toast.fail("验证码错误。");
                 return false;
-            }
+            }*/
         },
         sendCode(){
             //Notify({ type: 'danger', message: '通知内容' });

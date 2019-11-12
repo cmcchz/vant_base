@@ -1,5 +1,5 @@
 <template>
-    <div class="app-footer">
+    <div>
         <van-tabbar v-model="selectedLabelDefault" >
             <!-- :info="item.value"-->
             <van-tabbar-item
@@ -44,11 +44,11 @@ export default {
     name: 'v-footer',
     data () {
         return {
-            selectedLabelDefault: 'net-guest-home',
+            selectedLabelDefault: 'net-guest-order',
             my_telephone:'',
             tabbars: [
                 {
-                    name: "net-guest-home",
+                    name: "net-guest-order",
                     title: "网情上报",
                     icon: "home-o",
                     value: ''
@@ -65,7 +65,7 @@ export default {
                     icon: "friends-o",
                     value: ''
                 }
-            ]
+    ]
         }
     },
     created(){

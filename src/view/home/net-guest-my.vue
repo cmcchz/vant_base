@@ -9,23 +9,8 @@
             <van-tabbar-item icon="setting-o" v-bind:info="value1">标签</van-tabbar-item>
         </van-tabbar>
         -->
-        <van-nav-bar
-                title="我的上报记录"
-                left-text="返回"
-                right-text="按钮"
-                left-arrow
-                fixed
-                @click-left="onClickLeft"
-                @click-right="onClickRight"
-        >
-        <van-icon name="search" slot="right" />
-        </van-nav-bar>
-
-        <section style="height: 46px">
-
-        </section>
-
-
+        <v-header />
+        <section style="height: 46px"></section>
 
 
         <van-list
@@ -113,6 +98,7 @@
     } from 'vant';
     import footer from '../../components/v-footer/v-footer.vue'
     import VFooter from "../../components/v-footer/v-footer";
+    import header from '../../components/v-header/v-header.vue'
     export default {
 
         components: {
@@ -140,6 +126,7 @@
             [Step.name]:Step,
             [Steps.name]:Steps,
             [Notify.name]:Notify,
+            'v-header':header,
             'v-footer':footer
         },
 

@@ -8,6 +8,7 @@
                     :name="item.name"
                     :icon="item.icon"
                     :info="item.value"
+                    v-if="item.show==true"
                     @click="tab(item.name)"
             >
                 <span >{{item.title}}</span>
@@ -51,21 +52,24 @@ export default {
                     name: "net-guest-order",
                     title: "网情上报",
                     icon: "home-o",
+                    show:true,
                     value: ''
                 },
                 {
                     name: "net-guest-pending",
                     title: "待办",
                     icon: "friends-o",
+                    show:false,
                     value: ''
                 },
                 {
                     name: "net-guest-my",
                     title: "历史记录",
                     icon: "friends-o",
+                    show:true,
                     value: ''
                 }
-    ]
+            ]
         }
     },
     created(){
@@ -80,27 +84,42 @@ export default {
             this.my_user=JSON.parse(ms_user);
 
         }
-
-        let temp = {
-            'item_上报人号码': this.my_user.telephone
-        };
-        let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
-        getDocsByFormname(para).then((res) => {
-            this.tabbars[2].value = res.data.length;
-        });
-
-        let temp1 = {
-            'statelabel': '工单调度'
-        };
-        let para1 = {formname:'网络客情_主表单',parameters: JSON.stringify(temp1)};
-        getDocsByFormname(para1).then((res) => {
-            this.tabbars[1].value = res.data.length;
-        });
+        this.getOrder();
     },
     methods: {
         tab(val){
             this.$router.push(val);
+        },
+        getOrder(){
+            //获取本人处理的工单
+            let temp = {
+                'item_上报人号码': this.my_user.telephone
+            };
+            let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
+            getDocsByFormname(para).then((res) => {
+                this.tabbars[2].value = res.data.length;
+            });
+
+            let temp1={};
+            if(this.my_user.role.indexOf("处理中心")){
+                temp1 = {
+                    'statelabel': '客情处理',
+                    'item_处理中心':this.my_user.dept
+                };
+                this.tabbars[1].show=true;
+            }
+            else if(this.my_user.role.indexOf("调度")){
+                temp1 = {
+                    'statelabel': '工单调度'
+                };
+                this.tabbars[1].show=true;
+            }
+            let para1 = {formname:'网络客情_主表单',parameters: JSON.stringify(temp1)};
+            getDocsByFormname(para1).then((res) => {
+                this.tabbars[1].value = res.data.length;
+            });
         }
+
     }
 }
 </script>

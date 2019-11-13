@@ -9,7 +9,7 @@
                 @click-left="onClickLeft"
                 @click-right="onClickRight"
         >
-            <van-icon name="close" slot="right" />
+            <van-icon name="cross" slot="right" />
         </van-nav-bar>
     </div>
 </template>

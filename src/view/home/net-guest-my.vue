@@ -133,7 +133,7 @@
         data() {
             return {
                 show:false,
-                my_user:'',
+                my_user:{},
                 my_telephone:'',
                 docid:'',
                 activeNames: ['1'],
@@ -168,20 +168,13 @@
 
         },
         mounted() {
-            let ms_username = localStorage.getItem('ms_username');
-            let ms_username1=this.$route.params.ms_username;
-
-            if(ms_username!=null && ms_username!=undefined && ms_username.trim().length>0)
-                this.my_telephone=ms_username;
-            else if(ms_username1!=null && ms_username1!=undefined && ms_username1.trim().length>0)
-                this.my_telephone=ms_username1;
-            else
+            let ms_user = localStorage.getItem('ms_user');
+            if(ms_user==null || ms_user==undefined){
                 this.$router.push('/login');
+            }else{
+                //let ms_username1=this.$route.params.ms_username;
+                this.my_user=JSON.parse(ms_user);
 
-            for(let i=0;i<Users.length;i++){
-                if(Users[i]['手机号码']==this.my_telephone){
-                    this.my_user=Users[i]['姓名'];
-                }
             }
 
         },
@@ -237,7 +230,7 @@
                 setTimeout(() => {
 
                     let temp = {
-                        'item_上报人号码': this.my_telephone
+                        'item_上报人号码': this.my_user.telephone
                     };
                     let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
                     getDocsByFormname(para).then((res) => {

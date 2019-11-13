@@ -132,7 +132,7 @@
         data() {
             return {
                 show:false,
-                my_user:'',
+                my_user:{},
                 my_telephone:'',
                 docid:'',
                 activeNames: ['1'],
@@ -144,43 +144,20 @@
                 loading: false,
                 finished: false,
                 value1: 30,
-                currIndex: 1,
-                active: 1,//当前页面在下部导航中的位置编号
-                tabbars: [
-                    {
-                        name: "net-guest-home",
-                        title: "网情上报",
-                        icon: "home-o",
-                        value: 6
-                    },
+                currIndex: 1
 
-                    {
-                        name: "net-guest-my",
-                        title: "历史记录",
-                        icon: "friends-o",
-                        value: 8
-                    }
-                ]
             }
         },
         computed: {
 
         },
         mounted() {
-            let ms_username = localStorage.getItem('ms_username');
-            let ms_username1=this.$route.params.ms_username;
-
-            if(ms_username!=null && ms_username!=undefined && ms_username.trim().length>0)
-                this.my_telephone=ms_username;
-            else if(ms_username1!=null && ms_username1!=undefined && ms_username1.trim().length>0)
-                this.my_telephone=ms_username1;
-            else
+            let ms_user = localStorage.getItem('ms_user');
+            if(ms_user==null || ms_user==undefined){
                 this.$router.push('/login');
-
-            for(let i=0;i<Users.length;i++){
-                if(Users[i]['手机号码']==this.my_telephone){
-                    this.my_user=Users[i]['姓名'];
-                }
+            }else{
+                //let ms_username1=this.$route.params.ms_username;
+                this.my_user=JSON.parse(ms_user);
             }
 
         },
@@ -225,23 +202,13 @@
                 })
 
             },
-            onClickLeft() {
-                this.$router.go(-1);
-            },
-            onClickRight() {
 
-            },
-
-            tab(index, val) {
-                this.currIndex = index;
-                this.$router.push(val);
-            },
             onLoad() {
                 // 异步更新数据
                 setTimeout(() => {
 
                     let temp = {
-                        'item_上报人号码': this.my_telephone
+                        'item_上报人号码': this.my_user.telephone
                     };
                     let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
                     getDocsByFormname(para).then((res) => {

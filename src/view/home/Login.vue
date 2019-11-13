@@ -128,19 +128,21 @@ export default {
     },
     methods: {
         submitForm() {
-
-            localStorage.setItem('ms_username', this.param.username);
-            this.$router.push("/net-guest-home")
+            if(this.param.username.trim().length!=11){
+                this.telephone_error="请输入正确的手机号码!";
+                return;
+            }
+            let ms_user={name:"黄祚",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理中心'};
+            localStorage.setItem('ms_user', JSON.stringify(ms_user));
+            this.$router.push("/net-guest-order")
 
 
             /*if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
-
-                localStorage.setItem('ms_username', this.param.username);
-                localStorage.setItem('user', this.param.username);
-
-                this.$router.push("/net-guest-home")
+                let ms_user={name:"黄祚",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理'};
+                localStorage.setItem('ms_user', JSON.stringify(ms_user));
+                this.$router.push("/net-guest-order")
             } else {
-                localStorage.removeItem('ms_username');
+                localStorage.removeItem('ms_user');
                 this.$router.push('/login');
                 //console.log('error submit!!');
                 Toast.fail("验证码错误。");

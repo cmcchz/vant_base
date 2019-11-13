@@ -226,7 +226,7 @@
                 show:false,
                 showDispatch:false,
                 docid:'',
-                my_user:'',
+                my_user:{},
                 my_telephone:'',
                 doc:{
                     statelabel:'',
@@ -272,20 +272,13 @@
 
         },
         created(){
-            let ms_username = localStorage.getItem('ms_username');
-            let ms_username1=this.$route.params.ms_username;
-
-            if(ms_username!=null && ms_username!=undefined && ms_username.trim().length>0)
-                this.my_telephone=ms_username;
-            else if(ms_username1!=null && ms_username1!=undefined && ms_username1.trim().length>0)
-                this.my_telephone=ms_username1;
-            else
+            let ms_user = localStorage.getItem('ms_user');
+            if(ms_user==null || ms_user==undefined){
                 this.$router.push('/login');
+            }else{
+                //let ms_username1=this.$route.params.ms_username;
+                this.my_user=JSON.parse(ms_user);
 
-            for(let i=0;i<Users.length;i++){
-                if(Users[i]['手机号码']==this.my_telephone){
-                    this.my_user=Users[i]['姓名'];
-                }
             }
             this.docid=this.$route.params.docid;
             if(this.docid==null || this.docid==undefined ||this.docid.trim().length<=0){
@@ -377,8 +370,8 @@
                         '处理中心': "处理中心",
                         '处理内容': this.orderResult,
                         '处理时间': this.getTodayStr(),
-                        '处理人姓名':this.my_user,
-                        '联系方式': this.my_telephone,
+                        '处理人姓名':this.my_user.name,
+                        '联系方式': this.my_user.telephone,
                         '内容审核':'未审核',
                         'isRelate': 'true',
                         'parentid': this.docid
@@ -506,27 +499,7 @@
                     Toast.fail("已取消");
                 });
             },
-            onClickLeft() {
-               //Toast('返回');
-                this.$router.go(-1);
-            },
-            onClickRight() {
-                //Toast('按钮');
-            },
-            Shop(){
-                //this.cls2='van-tabbar-item van-tabbar-item--active'
-                //this.cls1='van-tabbar-item'
-                this.$router.push("/Goods")
-            },
 
-            tab(index, val) {
-                this.currIndex = index;
-                this.$router.push(val+"?docid="+this.docid);
-                /*if(index==0){
-                    this.$router.push(val+"?docid="+this.docid);
-                }else
-                    this.$router.push(val);*/
-            },
             onLoad() {
 
                 this. loadHandle();

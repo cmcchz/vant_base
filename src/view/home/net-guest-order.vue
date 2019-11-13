@@ -206,7 +206,7 @@
 
         data() {
             return {
-                my_user:'',
+                my_user:{},
                 my_telephone:'',
                 mode:'',
                 save_loading:false,
@@ -236,7 +236,7 @@
                 sub_docid:'',
 
                 center_name_picker:'',
-                gc_name: '工程1',
+
 
                 activeNames: ['1'],
                 list: [],
@@ -273,23 +273,17 @@
         computed: {},
         mounted() {
 
-            let ms_username = localStorage.getItem('ms_username');
-            let ms_username1=this.$route.params.ms_username;
-
-            if(ms_username!=null && ms_username!=undefined && ms_username.trim().length>0)
-                this.my_telephone=ms_username;
-            else if(ms_username1!=null && ms_username1!=undefined && ms_username1.trim().length>0)
-                this.my_telephone=ms_username1;
-            else
+            let ms_user = localStorage.getItem('ms_user');
+            console.log(ms_user);
+            if(ms_user==null || ms_user==undefined){
                 this.$router.push('/login');
 
-            for(let i=0;i<Users.length;i++){
-                if(Users[i]['手机号码']==this.my_telephone){
-                    this.my_user=Users[i]['姓名'];
-                }
+            }else{
+                //let ms_username1=this.$route.params.ms_username;
+                this.my_user=JSON.parse(ms_user);
+                this.getLocation();
             }
 
-            this.getLocation();
         },
         methods: {
             getLocation() {
@@ -451,8 +445,8 @@
 
                     let temp = {
                         '工单编号':this.uuid(),
-                        '上报人': this.my_user,
-                        '上报人号码': this.my_telephone,
+                        '上报人': this.my_user.name,
+                        '上报人号码': this.my_user.telephone,
                         '问题类型': this.doc.type,
                         '客户联系方式':this.doc.user_telephone,
                         '地址': this.doc.address,
@@ -476,8 +470,8 @@
 
                     createDocumentAndStartFlow(fd).then((res) => {
                         if(res.data.msg.result=="success"){
-                            toast.clear();
-                            this.$router.go(-1);
+                            Toast.clear();
+                            this.$router.push("/net-guest-order")
                         }else{
                             Toast.fail('提交失败，请重试');
                         }

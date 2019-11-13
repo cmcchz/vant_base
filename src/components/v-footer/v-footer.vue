@@ -68,6 +68,13 @@ export default {
                     icon: "friends-o",
                     show:true,
                     value: ''
+                },
+                {
+                    name: "net-guest-my",
+                    title: "待审核",
+                    icon: "friends-o",
+                    show:false,
+                    value: ''
                 }
             ]
         }

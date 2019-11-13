@@ -132,13 +132,14 @@ export default {
                 this.telephone_error="请输入正确的手机号码!";
                 return;
             }
-            let ms_user={name:"黄祚",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理中心'};
+
+            /*let ms_user={name:"黄祚",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理中心'};
             localStorage.setItem('ms_user', JSON.stringify(ms_user));
             this.$router.push("/net-guest-order")
+            */
 
-
-            /*if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
-                let ms_user={name:"黄祚",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理'};
+            if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
+                let ms_user={name:"测试",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理中心'};
                 localStorage.setItem('ms_user', JSON.stringify(ms_user));
                 this.$router.push("/net-guest-order")
             } else {
@@ -147,11 +148,15 @@ export default {
                 //console.log('error submit!!');
                 Toast.fail("验证码错误。");
                 return false;
-            }*/
+            }
         },
         sendCode(){
             //Notify({ type: 'danger', message: '通知内容' });
-
+            if(this.param.username.trim().length!=11){
+                // Notify({ type: 'danger', message: '请输入正确的手机号码！' });
+                this.telephone_error="请输入正确的手机号码!";
+                return;
+            }
             let second = 60;
             const timer = setInterval(() => {
                 second--;
@@ -167,11 +172,7 @@ export default {
             }, 1000);
 
 
-            if(this.param.username.trim().length!=11){
-               // Notify({ type: 'danger', message: '请输入正确的手机号码！' });
-                this.telephone_error="请输入正确的手机号码!";
-                return;
-            }
+
             let isUser=false;
             const that=this;
             Users.forEach(function (c) {

@@ -397,6 +397,7 @@
                 this.showOut = false;
             },
             onConfirmType(value, index) {
+
                 this.doc.type = value;
                 this.showType = false;
             },
@@ -443,39 +444,65 @@
                         message: 'loading'
                     });
 
-                    let temp = {
-                        '工单编号':this.uuid(),
-                        '上报人': this.my_user.name,
-                        '上报人号码': this.my_user.telephone,
-                        '问题类型': this.doc.type,
-                        '客户联系方式':this.doc.user_telephone,
-                        '地址': this.doc.address,
-                        '经度': this.doc.lng,
-                        '纬度': this.doc.lat,
-                        '问题描述': this.doc.content,
-                        '派单时间':this.dateFormat(new Date())
-
+                    let temp1 = {
+                        'item_手机号码': this.doc.user_telephone.trim()
                     };
-
-                    let fd = new FormData();
-                    if (this.files.length>0) { // 判断是否是多图上传 多图则循环添加进去
-                        this.files.forEach(item => {
-                            fd.append("attachment[]", item)
-                        })
-                    }
-                    fd.append("formname","网络客情_主表单");
-                    fd.append("userid","11e9-6a1f-6c0f19ca-b39f-97d415a76d79");
-                    fd.append("submit","1");
-                    fd.append("parameters",JSON.stringify(temp));
-
-                    createDocumentAndStartFlow(fd).then((res) => {
-                        if(res.data.msg.result=="success"){
-                            Toast.clear();
-                            this.$router.push("/net-guest-order")
-                        }else{
-                            Toast.fail('提交失败，请重试');
+                    let params = {formname:'网络客情_用户',parameters: JSON.stringify(temp1)};
+                    getDocsByFormname(params).then((res) => {
+                        let level=this.my_user.紧急程度;
+                        if(res.data.length>0){
+                            level=res.data[0].紧急程度;
                         }
+                        let temp = {
+                            '工单编号':this.uuid(),
+                            '紧急程度':level,
+                            '上报人': this.my_user.姓名,
+                            '上报人号码': this.my_user.手机号码,
+                            '问题类型': this.doc.type,
+                            '客户联系人':this.doc.user_name,
+                            '客户联系方式':this.doc.user_telephone,
+                            '地址': this.doc.address,
+                            '经度': this.doc.lng,
+                            '纬度': this.doc.lat,
+                            '问题描述': this.doc.content,
+                            '派单时间':this.dateFormat(new Date())
+
+                        };
+
+                        let fd = new FormData();
+                        if (this.files.length>0) { // 判断是否是多图上传 多图则循环添加进去
+                            this.files.forEach(item => {
+                                fd.append("attachment[]", item)
+                            })
+                        }
+                        fd.append("formname","网络客情_主表单");
+                        fd.append("userid","11e9-6a1f-6c0f19ca-b39f-97d415a76d79");
+                        fd.append("submit","1");
+                        fd.append("parameters",JSON.stringify(temp));
+
+                        createDocumentAndStartFlow(fd).then((res) => {
+                            if(res.data.msg.result=="success"){
+                                Toast.clear();
+                                Toast.success('提交成功');
+                                this.doc={
+                                        user_name:'',
+                                        user_telephone:'',
+                                        content:'',
+                                        type: '',
+                                        location: this.doc.location,
+                                        lat:this.doc.lat,
+                                        lng:this.doc.lng,
+                                        address:this.doc.address,
+                                        create_time: this.getTodayStr()
+                                }
+                                //this.$router.push("/net-guest-order")
+                            }else{
+                                Toast.fail('提交失败，请重试');
+                            }
+                        });
                     });
+
+
 
                 } else {
                    Notify(rtn);

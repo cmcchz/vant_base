@@ -38,11 +38,9 @@
 
 <script>
     import {
-        smsCode
+        smsCode,
+        getDocsByFormname
     } from '../../api/net_guest.js';
-    import {
-        Users
-    } from '../../api/users.js';
     import {
         Tag,
         Col,
@@ -113,6 +111,8 @@ export default {
                 username: '',
                 code: '',
             },
+            user:{},
+            second:0,
             smsCode:'',
             smsTelephone:'',
             isdisabledFn:false,
@@ -140,7 +140,7 @@ export default {
 
             if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
                 let ms_user={name:"测试",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理中心'};
-                localStorage.setItem('ms_user', JSON.stringify(ms_user));
+                localStorage.setItem('ms_user', JSON.stringify(this.user));
                 this.$router.push("/net-guest-order")
             } else {
                 localStorage.removeItem('ms_user');
@@ -157,12 +157,12 @@ export default {
                 this.telephone_error="请输入正确的手机号码!";
                 return;
             }
-            let second = 60;
+            this.second = 60;
             const timer = setInterval(() => {
-                second--;
-                if (second) {
+                this.second--;
+                if (this.second) {
                     this.isdisabledFn=true;
-                    this.button_text=second+"s";
+                    this.button_text=this.second+"s";
                 } else {
                     clearInterval(timer);
                     // 手动清除 Toast
@@ -172,30 +172,29 @@ export default {
             }, 1000);
 
 
+            let temp = {
+                'item_手机号码': this.param.username.trim()
+            };
+            let params = {formname:'网络客情_用户',parameters: JSON.stringify(temp)};
+            getDocsByFormname(params).then((res) => {
+                if(res.data.length<=0){
+                    this.telephone_error="该号码无登录权限，请联系管理员!";
+                    this.second=1;
+                }else{
+                    this.user = res.data[0];
+                    this.telephone_error="";
+                    let para = {"telephone": this.param.username.trim()};
+                    this.smsTelephone=this.param.username.trim();
+                    smsCode(para).then((res) => {
+                        this.smsCode=res.data.code;
+                        //console.log('验证码：', this.smsCode)
+                        if(this.smsCode!="-1"){
+                            console.log('验证码：', this.smsCode)
+                        }
 
-            let isUser=false;
-            const that=this;
-            Users.forEach(function (c) {
-                if(c['手机号码']==that.param.username.trim()){
-                    isUser=true;
+                    });
                 }
             });
-            if(!isUser){
-                this.telephone_error="该号码无登录权限，请联系管理员!";
-                return;
-            }
-            this.telephone_error="";
-            let para = {"telephone": this.param.username};
-            this.smsTelephone=this.param.username;
-            smsCode(para).then((res) => {
-                this.smsCode=res.data.code;
-                //console.log('验证码：', this.smsCode)
-                if(this.smsCode!="-1"){
-                    console.log('验证码：', this.smsCode)
-                }
-
-            });
-
         }
     },
 };

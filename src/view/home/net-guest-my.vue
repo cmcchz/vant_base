@@ -22,7 +22,7 @@
             <van-swipe-cell  v-for="item in doc_list" :key="item.docId">
 
                 <van-cell-group>
-                    <van-cell :title="item.问题类型+'-'+item.客户联系方式" :value="item.上报人" :label="'上报时间：' +item.派单时间.slice(5,16)"  icon="thumb-circle-o" @click="onClickList(item)"/>
+                    <van-cell :title="item.问题类型+'-'+item.客户联系人+'-'+item.客户联系方式" :value="item.紧急程度" :label="'上报时间：' +item.派单时间.slice(5,16)"  icon="thumb-circle-o" @click="onClickList(item)"/>
                 </van-cell-group>
 
             </van-swipe-cell>
@@ -230,7 +230,7 @@
                 setTimeout(() => {
 
                     let temp = {
-                        'item_上报人号码': this.my_user.telephone
+                        'item_上报人号码': this.my_user.手机号码
                     };
                     let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
                     getDocsByFormname(para).then((res) => {

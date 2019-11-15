@@ -367,12 +367,12 @@
                     });
 
                     let temp = {
-                        '处理中心': "处理中心",
+                        '处理中心': this.my_user.部门,
                         '处理内容': this.orderResult,
                         '处理时间': this.getTodayStr(),
-                        '处理人姓名':this.my_user.name,
-                        '联系方式': this.my_user.telephone,
-                        '内容审核':'未审核',
+                        '处理人姓名':this.my_user.姓名,
+                        '联系方式': this.my_user.手机号码,
+                        '内容审核':'待审核',
                         'isRelate': 'true',
                         'parentid': this.docid
                     };
@@ -394,7 +394,45 @@
             },
             //新增一条结束预警的记录
             onFinish(){
+                if(this.orderResult==''){
+                    Notify("请填写处理内容！");
+                    return;
+                }
 
+                Dialog.confirm({
+                    title: '确认',
+                    message: '是否提交结束申请？'
+                }).then(() => {
+                    // on confirm
+                    Toast.loading({
+                        message: '处理中...',
+                        duration:10000,
+                        forbidClick: true,
+                        loadingType: 'spinner'
+                    });
+
+                    let temp = {
+                        '处理中心': this.my_user.部门,
+                        '处理内容': "结束申请:"+this.orderResult,
+                        '处理时间': this.getTodayStr(),
+                        '处理人姓名':this.my_user.姓名,
+                        '联系方式': this.my_user.手机号码,
+                        '内容审核':'待审核',
+                        'isRelate': 'true',
+                        'parentid': this.docid
+                    };
+
+                    let fd = new FormData();
+                    fd.append("formname","网络客情_阶段回复");
+                    fd.append("parameters",JSON.stringify(temp));
+                    createDocument(fd).then((res) => {
+                        Toast.clear();
+                        this.$router.go(-1);
+                    });
+                }).catch(() => {
+                    // on cancel
+                    Toast.fail("已取消");
+                });
 
             },
             //新增一条记录
@@ -571,9 +609,7 @@
         }
     }
 
-    .van-collapse-item__title{
-        background-color: #11c0ff;
-    }
+
     .van-panel__header{
         background-color: #e6fcff;
     }

@@ -100,7 +100,7 @@ export default {
         getOrder(){
             //获取本人处理的工单
             let temp = {
-                'item_上报人号码': this.my_user.telephone
+                'item_上报人号码': this.my_user.手机号码
             };
             let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
             getDocsByFormname(para).then((res) => {
@@ -108,14 +108,14 @@ export default {
             });
 
             let temp1={};
-            if(this.my_user.role.indexOf("处理中心")){
+            if(this.my_user.角色.indexOf("处理中心")>=0){
                 temp1 = {
                     'statelabel': '客情处理',
-                    'item_处理中心':this.my_user.dept
+                    'item_处理中心':this.my_user.部门
                 };
                 this.tabbars[1].show=true;
             }
-            else if(this.my_user.role.indexOf("调度")){
+            else if(this.my_user.角色.indexOf("调度")>=0){
                 temp1 = {
                     'statelabel': '工单调度'
                 };

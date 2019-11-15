@@ -24,7 +24,7 @@
             <van-swipe-cell  v-for="item in doc_list" :key="item.docId">
 
                 <van-cell-group>
-                    <van-cell :title="item.问题类型+'-'+item.客户联系方式" :value="item.上报人" :label="'上报时间：' +item.派单时间.slice(5,16)"  icon="thumb-circle-o" @click="onClickList(item)"/>
+                    <van-cell :title="item.问题类型+'-'+item.客户联系人+'-'+item.客户联系方式" :value="item.紧急程度" :label="'上报时间：' +item.派单时间.slice(5,16)"  icon="thumb-circle-o" @click="onClickList(item)"/>
                 </van-cell-group>
 
             </van-swipe-cell>
@@ -202,26 +202,36 @@
                 })
 
             },
+            getOrder(){
 
+                let temp1={};
+                if(this.my_user.角色.indexOf("处理中心")>=0){
+                    temp1 = {
+                        'statelabel': '客情处理',
+                        'item_处理中心':this.my_user.部门
+                    };
+                }
+                else if(this.my_user.角色.indexOf("调度")>=0){
+                    temp1 = {
+                        'statelabel': '工单调度'
+                    };
+                }
+                let para1 = {formname:'网络客情_主表单',parameters: JSON.stringify(temp1)};
+                getDocsByFormname(para1).then((res) => {
+                    this.doc_list = res.data;
+
+                    this.doc_list.sort(function(a,b){
+                        return b['派单时间'] > a['派单时间'] ? 1 : -1;
+                    });
+                    this.finished = true;
+                    this.loading= false;
+                });
+            },
             onLoad() {
                 // 异步更新数据
                 setTimeout(() => {
 
-                    let temp = {
-                        'item_上报人号码': this.my_user.telephone
-                    };
-                    let para = {formname:'网络客情_主表单',parameters: JSON.stringify(temp)};
-                    getDocsByFormname(para).then((res) => {
-                        this.doc_list = res.data;
-
-                        this.doc_list.sort(function(a,b){
-                            return b['派单时间'] > a['派单时间'] ? 1 : -1;
-                        });
-
-                        this.finished = true;
-                        this.loading= false;
-
-                    });
+                    this.getOrder();
                 }, 500);
             },
             onClose(){

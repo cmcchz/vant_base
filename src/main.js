@@ -3,10 +3,18 @@ import App from './App';
 import { router } from './router';
 import Mock from './mock/mock.js'
 import globalVariable from './api/global_variable.js'
+import {setCookie, getCookie, delCookie} from './api/cookie.js';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 Vue.prototype.GLOBAL=globalVariable;
+
+Vue.prototype.$cookieStore = {
+    setCookie,
+    getCookie,
+    delCookie
+}
+
 //Mock.open();
 
 //使用钩子函数对路由进行权限跳转

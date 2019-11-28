@@ -107,6 +107,13 @@ const routes = [
         }
     },
     {
+        name: 'big_alarm',
+        component: () => import('./view/home/big-alarm.vue'),
+        meta: {
+            title: '重大故障共享平台'
+        }
+    },
+    {
         name: 'net-guest-home',
         components: { // key => value
             header: () => import('./components/v-header/v-header.vue'),

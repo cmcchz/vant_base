@@ -21,42 +21,18 @@
             <van-collapse-item  name="2">
                 <div slot="title">详情 <van-icon name="question-o" /></div>
                 {{'处理中心：'+doc.处理中心}}<br>
+                {{'当前处理人：'+doc.当前处理人}}<br>
+                {{'处理中心：'+doc.处理中心}}<br>
                 {{'流程状态：'+doc.statelabel}}<br>
                 {{'客户联系方式：'+doc.客户联系方式}}<br>
                 {{'问题描述：'+doc.问题描述}}<br>
             </van-collapse-item>
 
-            <van-collapse-item  name="3" v-if="doc.statelabel=='工单调度'">
-                <div slot="title">工单调度 <van-icon name="friends" /></div>
-                <van-checkbox-group v-model="centerResult" style="margin-left: 20px">
-                    <van-checkbox  v-for="item in center_list" :name="item" :key="item">{{item}}</van-checkbox>
-                </van-checkbox-group>
-                <section style="height: 10px">
+            <van-row>
+                <van-col span="24"><van-button type="primary" size="normal" v-if="doc.statelabel=='工单处理' && my_user.角色.indexOf('调度')>=0" @click="showDispatch=true" style="width: 100%;margin-top: 5px">工单调度</van-button></van-col>
+                <van-col span="24"><van-button type="info" size="normal" v-if="doc.statelabel=='工单处理'" @click="showChuli=true" style="width: 100%;margin-top: 5px">工单处理</van-button></van-col>
+            </van-row>
 
-                </section>
-                <van-row>
-                    <van-col span="24"><van-button v-if="doc.statelabel=='工单调度'" size="large" type="warning" @click="onDispatch">事件调度</van-button></van-col>
-                </van-row>
-            </van-collapse-item>
-
-            <van-collapse-item  name="4" v-if="doc.statelabel=='客情处理'">
-                <div slot="title">工单处理 <van-icon name="friends" /></div>
-
-                    <van-field
-                            v-model="orderResult"
-                            rows="1"
-                            autosize
-                            label="处理内容："
-                            type="textarea"
-                            placeholder="请填写处理内容"
-                    />
-
-
-                <van-row>
-                    <van-col span="12"><van-button type="primary" size="normal" v-if="doc.statelabel=='客情处理'" @click="onHandle" style="width: 100%;margin-right: 5px">阶段反馈</van-button></van-col>
-                    <van-col span="12"><van-button type="info" size="normal" v-if="doc.statelabel=='客情处理'" @click="onFinish" style="width: 100%;margin-left: 5px">申请办结</van-button></van-col>
-                </van-row>
-            </van-collapse-item>
 
         </van-collapse>
 
@@ -112,6 +88,78 @@
                             <van-col span="8"><van-button type="info" size="small" @click="onConfirm" style="width: 100%;margin-right: 5px">通过</van-button></van-col>
                             <van-col span="8"><van-button type="warning" size="small" @click="onConfirmNo" style="width: 100%;margin-left: 5px;margin-right: 5px">不通过</van-button></van-col>
                             <van-col span="8" style="padding-left: 5px"><van-button type="default" size="small"  plain @click="show=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
+                        </van-row>
+                    </div>
+                </van-panel>
+
+            </van-cell-group>
+        </van-popup>
+
+        <van-popup v-model="showDispatch" position="center" :close-on-click-overlay=true
+                   :style="{ width: '100%',height:'50%'}">
+
+            <van-cell-group>
+
+                <van-panel title="工单调度" desc="" status="">
+                    <section style="height: 10px">
+
+                    </section>
+                    <div>
+                        <van-checkbox-group v-model="centerResult" style="margin-left: 20px">
+                            <van-checkbox shape="square" style="margin-bottom: 5px" v-for="item in center_list" :name="item" :key="item">{{item}}</van-checkbox>
+                        </van-checkbox-group>
+                        <section style="height: 10px">
+
+                        </section>
+
+                    </div>
+                    <div slot="footer">
+                        <van-row>
+                            <van-col span="12"><van-button  size="normal" type="info" @click="onDispatch"  style="width: 100%;margin-right: 5px">确定</van-button></van-col>
+                            <van-col span="12"><van-button  size="normal" type="default" @click="showDispatch=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
+                        </van-row>
+                    </div>
+                </van-panel>
+
+            </van-cell-group>
+        </van-popup>
+
+
+        <van-popup v-model="showChuli" position="center" :close-on-click-overlay=true
+                   :style="{ width: '100%',height:'50%'}">
+
+
+            <van-cell-group>
+
+                <van-panel title="工单处理" desc="" status="">
+                    <section style="height: 10px">
+
+                    </section>
+                    <div>
+                        <van-field
+                                v-model="orderResult"
+                                rows="2"
+                                autosize
+                                label="内容："
+                                type="textarea"
+                                placeholder="请填写处理内容"
+                                maxlength="500"
+                                show-word-limit
+                        />
+
+
+                        <section style="height: 10px">
+
+                        </section>
+
+                    </div>
+                    <div slot="footer">
+                        <van-row>
+
+                            <van-col span="8"><van-button type="warning" size="normal"  @click="onHandle" style="width: 100%;margin-right: 5px">阶段反馈</van-button></van-col>
+                            <van-col span="8"><van-button type="info" size="normal"  @click="onFinish"  style="width: 100%;margin-left: 5px;margin-right: 5px">申请办结</van-button></van-col>
+                            <van-col span="8" style="padding-left: 5px"><van-button type="default" size="normal"  plain @click="showChuli=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
+
                         </van-row>
                     </div>
                 </van-panel>
@@ -218,13 +266,14 @@
 
         data() {
             return {
-                center_list:['基础网维护中心','传输动力中心','无线优化中心'],
+                center_list:['基础网维护中心','传输动力中心','无线优化中心','家客支撑中心','政企支撑中心','市区网络部','仙游网络部','涵江网络部','秀屿网络部'],
                 centerResult:[],
                 orderResult:'',
                 handleResult:'',
                 handle_docid:'',
                 show:false,
                 showDispatch:false,
+                showChuli:false,
                 docid:'',
                 my_user:{},
                 my_telephone:'',
@@ -278,6 +327,7 @@
             }else{
                 //let ms_username1=this.$route.params.ms_username;
                 this.my_user=JSON.parse(ms_user);
+                console.log(JSON.stringify(this.my_user));
 
             }
             this.docid=this.$route.params.docid;
@@ -333,6 +383,7 @@
                         center_names+=this.centerResult[i]+';';
                     let temp = {
                         '处理中心':center_names,
+                        '流程控制':'调度'
                     };
                     let para = { 'docid': this.docid,parameters: JSON.stringify(temp)};
                     updateANDsubmit(para).then((res) => {
@@ -490,7 +541,7 @@
 
 
                     let temp = {
-                        '内容审核':'通过',
+                        '内容审核':'已通过',
                         '处理内容':this.handleResult
                     };
                     let para = { 'docid': this.handle_docid,parameters: JSON.stringify(temp)};

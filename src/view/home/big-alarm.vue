@@ -13,7 +13,7 @@
             <van-icon name="cross" slot="right" />
         </van-nav-bar>
         <section style="height: 46px"></section>
-        <van-cell-group>
+        <van-cell-group  v-if="isLogin==true">
             <van-panel :title="doc.故障发生时间.slice(0,16)"  :status="doc.预警类别">
                 <div style="margin: 16px;">
                     {{doc.预警主题}}
@@ -37,14 +37,14 @@
             </van-panel>
         </van-cell-group>
 
-        <section style="height: 5px;background-color: #7bbeff"></section>
+        <section style="height: 5px;"></section>
 
 
 
-        <van-row>
+        <van-row  v-if="isLogin==true">
             <van-col span="5">
                 <van-sidebar v-model="tab" @change="onTabClick">
-                    <van-sidebar-item v-for="(item,i) in tab_data" :key="item.center" :title="item.label" :info="item.list.length" />
+                    <van-sidebar-item v-for="(item,i) in tab_data" :key="item.center" :title="item.label" :info="item.list.length<=0?'':item.list.length" />
 
                 </van-sidebar>
             </van-col>
@@ -58,7 +58,7 @@
                             finished-text="没有更多了"
                             @load="onLoad"
                     >
-                        <van-panel v-for="item in show_list" :key="item.docId" :title="item.处理时间.slice(0,16)" desc="" :status="item.处理人姓名+item.联系方式" >
+                        <van-panel v-for="(item,i) in show_list" :key="item.docId" :title="item.处理时间.slice(0,16)" desc="" :status="item.处理人姓名+item.联系方式" >
                             <div class="mylist-content">
                                 {{item.处理内容}}<br>
                             </div>
@@ -231,7 +231,7 @@ export default {
                     label:'政企',center:'政企支撑中心',list:[]
                 },
                 {
-                    label:'资源',center:'资源室',list:[]
+                    label:'综合',center:'资源室',list:[]
                 },
 
             ],
@@ -258,6 +258,9 @@ export default {
             this.isLogin=true;
             this.my_user=JSON.parse(ms_username);
             this.show=false;
+        }else{
+            this.isLogin=false;
+            this.show=true;
         }
     },
     mounted(){
@@ -279,13 +282,7 @@ export default {
             return year + "-" + month + "-" + day + " " + hours + ":" + minutes;
         },
         onTabClick(index){
-
-            //Toast(this.tab);
-
-            if(this.tab==0)
-                this.show_list=this.handle_list;
-            else
-                this.show_list=[];
+           this.show_list=this.tab_data[index].list;
         },
         submitForm() {
             if(this.param.username.trim().length!=11){
@@ -403,6 +400,7 @@ export default {
                 let paraHandle = {formname:'本地预警_处理过程',parameters: JSON.stringify(temp)};
                 getDocsByFormname(paraHandle).then((res) => {
                     this.handle_list = res.data;
+
                     this.finished = true;
                     this.loading= false;
                     if(this.handle_list.length>0){
@@ -414,8 +412,20 @@ export default {
 
                         //Notify(this.last_handle_docid+'==='+this.last_handle_time);
                     }
+
                     if(this.tab==0)
                         this.show_list=this.handle_list;
+
+                    for (let x=0;x<this.tab_data.length;x++){
+                        this.tab_data[x].list=[];
+                    }
+                    this.tab_data[0].list=this.handle_list;
+                    for(let i=0;i<this.handle_list.length;i++){
+                        for (let j=1;j<this.tab_data.length;j++){
+                            if(this.tab_data[j].center==this.handle_list[i].处理中心)
+                                this.tab_data[j].list.push(this.handle_list[i])
+                        }
+                    }
                 });
             }, 500);
 
@@ -425,6 +435,9 @@ export default {
         },
         onClickRight() {
             localStorage.removeItem('ms_user');
+            this.smsCode='';
+            this.param.username='';
+            this.param.code='';
             this.isLogin=false;
             this.show=true;
         },
@@ -481,17 +494,22 @@ export default {
         font-size: 12px;
     }
     .mylist-content{
-        border-bottom:1px solid #2196F3;
-        border-left:1px solid #2196F3;
-        background-color: white;color:black;
+        border-bottom:1px solid #ffffff;
+        border-left:1px solid #ffffff;
+        background-color: #e6fcff;
+        color:black;
         font-size: 14px;
         padding: 5px;
     }
     .mylist  .van-panel__header{
-
-        border-left:1px solid #2196F3;
+        background-color: #09c9ff;
+        border-left:1px solid #ffffff;
     }
-    .mylist .van-notice-bar__content{
+    .van-notice-bar__content{
         font-size: 14px;
+        background-color: #969799;
+    }
+    .grey{
+        background-color: #969799;
     }
 </style>

@@ -36,9 +36,9 @@
 
         <v-footer></v-footer>
 
-        <van-popup v-model="show" position="right"
-                   :style="{ width: '60%',height:'100%'}">
-            <van-collapse  v-model="activeNames">
+        <van-popup v-model="show" position="bottom" closeable
+                   :style="{ width: '100%',height:'80%'}">
+            <van-collapse  v-model="activeNames" style="margin-top: 40px">
                 <van-collapse-item :title="sub_doc_title" name="1" icon="todo-list-o">{{sub_doc_info}}</van-collapse-item>
             </van-collapse>
 
@@ -199,7 +199,8 @@
                 this.sub_doc_title=item.问题类型+"-"+item.上报人;
                 this.sub_doc_info=item.问题描述;
                 let temp = {
-                    'parent': item.docId
+                    'parent': item.docId,
+                    'item_内容审核':'已通过'
                 };
                 let para = {formname:'网络客情_阶段回复',parameters: JSON.stringify(temp)};
                 getDocsByFormname(para).then((res) => {

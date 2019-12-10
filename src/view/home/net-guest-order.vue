@@ -465,7 +465,8 @@
                             '经度': this.doc.lng,
                             '纬度': this.doc.lat,
                             '问题描述': this.doc.content,
-                            '派单时间':this.dateFormat(new Date())
+                            '派单时间':this.dateFormat(new Date()),
+                            '处理中心':'基础网维护中心'
 
                         };
 

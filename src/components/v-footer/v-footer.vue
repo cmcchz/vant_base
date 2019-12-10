@@ -108,19 +108,20 @@ export default {
             });
 
             let temp1={};
-            if(this.my_user.角色.indexOf("处理中心")>=0){
+            if(this.my_user.角色.indexOf("调度")>=0){
                 temp1 = {
-                    'statelabel': '客情处理',
+                    'statelabel': '工单处理'
+                };
+                this.tabbars[1].show=true;
+            }
+            else if(this.my_user.角色.indexOf("处理中心")>=0){
+                temp1 = {
+                    'statelabel': '工单处理',
                     'item_处理中心':this.my_user.部门
                 };
                 this.tabbars[1].show=true;
             }
-            else if(this.my_user.角色.indexOf("调度")>=0){
-                temp1 = {
-                    'statelabel': '工单调度'
-                };
-                this.tabbars[1].show=true;
-            }
+
             let para1 = {formname:'网络客情_主表单',parameters: JSON.stringify(temp1)};
             getDocsByFormname(para1).then((res) => {
                 this.tabbars[1].value = res.data.length;

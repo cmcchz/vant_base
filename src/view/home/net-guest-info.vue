@@ -96,7 +96,7 @@
         </van-popup>
 
         <van-popup v-model="showDispatch" position="center" :close-on-click-overlay=true
-                   :style="{ width: '100%',height:'50%'}">
+                   :style="{ width: '80%',height:'80%'}">
 
             <van-cell-group>
 
@@ -126,7 +126,7 @@
 
 
         <van-popup v-model="showChuli" position="center" :close-on-click-overlay=true
-                   :style="{ width: '100%',height:'50%'}">
+                   :style="{ width: '80%',height:'50%'}">
 
 
             <van-cell-group>

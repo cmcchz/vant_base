@@ -49,8 +49,8 @@
             >
                 <van-panel v-for="item in doc_list" :key="item.docId" :title="item.处理人姓名+'--'+item.处理中心" desc="" :status="item.内容审核"  v-on:click="onClickList(item)">
                     <van-notice-bar wrapable :scrollable="false" style="background-color: white;color:black;font-size: 12px">
-                        【回复时间】：{{item.处理时间.slice(0,16)}}<br>
-                        【处理内容】：{{item.处理内容}}<br>
+                        <span style="color:#09c9ff">回复时间：</span>{{item.处理时间.slice(0,16)}}<br>
+                        <span style="color:#09c9ff">处理内容：</span>{{item.处理内容}}<br>
                     </van-notice-bar>
                 </van-panel>
 
@@ -96,7 +96,7 @@
         </van-popup>
 
         <van-popup v-model="showDispatch" position="center" :close-on-click-overlay=true
-                   :style="{ width: '80%',height:'80%'}">
+                   :style="{ width: '90%'}">
 
             <van-cell-group>
 
@@ -115,18 +115,21 @@
                     </div>
                     <div slot="footer">
                         <van-row>
-                            <van-col span="12"><van-button  size="normal" type="info" @click="onDispatch"  style="width: 100%;margin-right: 5px">确定</van-button></van-col>
-                            <van-col span="12"><van-button  size="normal" type="default" @click="showDispatch=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
+                            <van-col span="12"><van-button  size="small" type="info" @click="onDispatch"  style="width: 100%;margin-right: 5px">确定</van-button></van-col>
+                            <van-col span="12"><van-button  size="small" type="default" @click="showDispatch=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
                         </van-row>
                     </div>
                 </van-panel>
 
             </van-cell-group>
+            <section style="height: 10px">
+
+            </section>
         </van-popup>
 
 
         <van-popup v-model="showChuli" position="center" :close-on-click-overlay=true
-                   :style="{ width: '80%',height:'50%'}">
+                   :style="{ width: '90%'}">
 
 
             <van-cell-group>
@@ -156,15 +159,18 @@
                     <div slot="footer">
                         <van-row>
 
-                            <van-col span="8"><van-button type="warning" size="normal"  @click="onHandle" style="width: 100%;margin-right: 5px">阶段反馈</van-button></van-col>
-                            <van-col span="8"><van-button type="info" size="normal"  @click="onFinish"  style="width: 100%;margin-left: 5px;margin-right: 5px">申请办结</van-button></van-col>
-                            <van-col span="8" style="padding-left: 5px"><van-button type="default" size="normal"  plain @click="showChuli=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
+                            <van-col span="8"><van-button type="warning" size="small"  @click="onHandle" style="width: 100%;margin-right: 5px">阶段反馈</van-button></van-col>
+                            <van-col span="8"><van-button type="info" size="small"  @click="onFinish"  style="width: 100%;margin-left: 5px;margin-right: 5px">申请办结</van-button></van-col>
+                            <van-col span="8" style="padding-left: 5px"><van-button type="default" size="small"  plain @click="showChuli=false" style="width: 100%;margin-left: 5px">取消</van-button></van-col>
 
                         </van-row>
                     </div>
                 </van-panel>
 
             </van-cell-group>
+            <section style="height: 10px">
+
+            </section>
         </van-popup>
 
     </div>
@@ -521,9 +527,12 @@
                     });
                 }
                 */
-                this.handleResult=item.处理内容;
-                this.handle_docid=item.docId;
-                this.show=true;
+                if(this.my_user.角色.indexOf('调度')>=0){
+                    this.handleResult=item.处理内容;
+                    this.handle_docid=item.docId;
+                    this.show=true;
+                }
+
 
             },
             onConfirm(){

@@ -38,7 +38,7 @@
 
         <van-popup v-model="show" position="bottom" closeable
                    :style="{ width: '100%',height:'80%'}">
-            <van-collapse  v-model="activeNames" >
+            <van-collapse  v-model="activeNames" style="padding-top: 40px">
                 <van-collapse-item :title="sub_doc_title" name="1" icon="todo-list-o">{{sub_doc_info}}</van-collapse-item>
             </van-collapse>
 

@@ -123,7 +123,11 @@ export default {
     created(){
         let ms_username = localStorage.getItem('ms_user');
         if(ms_username!=null && ms_username!=undefined && ms_username.trim().length>0){
-            this.$router.push("/net-guest-home");
+            let ms_user=JSON.parse(ms_username);
+            if(ms_user.角色.indexOf('调度')>=0 || ms_user.角色.indexOf('处理中心')>=0 )
+                this.$router.push("/net-guest-pending");
+            else
+                this.$router.push("/net-guest-order");
         }
 
 
@@ -142,10 +146,13 @@ export default {
             */
 
             if (this.smsCode==this.param.code && this.smsTelephone==this.param.username) {
-                let ms_user={name:"测试",telephone:this.param.username,dept:'基础网维护中心',role:'调度;处理中心'};
+
                 localStorage.setItem('ms_user', JSON.stringify(this.user));
                 //this.$cookieStore.setCookie('name', JSON.stringify(this.user));
-                this.$router.push("/net-guest-order")
+                if(this.user.角色.indexOf('调度')>=0 || this.user.角色.indexOf('处理中心')>=0 )
+                    this.$router.push("/net-guest-pending");
+                else
+                    this.$router.push("/net-guest-order");
             } else {
                 localStorage.removeItem('ms_user');
                 this.$router.push('/login');

@@ -121,7 +121,7 @@ const routes = [
             footer: () => import('./components/v-footer/v-footer.vue')
         },
         meta: {
-            title: '网络客情首页',
+            title: '网络挑刺首页',
             permission: true
         }
     },
@@ -129,7 +129,7 @@ const routes = [
         name: 'net-guest-order',
         component: () => import('./view/home/net-guest-order.vue'),
         meta: {
-            title: '网络客情上报',
+            title: '网络挑刺下单',
             permission: true
         }
     },
@@ -137,7 +137,7 @@ const routes = [
         name: 'net-guest-my',
         component: () => import('./view/home/net-guest-my.vue'),
         meta: {
-            title: '我的客情工单',
+            title: '我的工单',
             permission: true
         }
     },
@@ -153,7 +153,7 @@ const routes = [
         name: 'net-guest-info',
         component: () => import('./view/home/net-guest-info.vue'),
         meta: {
-            title: '客情工单处理',
+            title: '工单处理',
             permission: true
         }
     }

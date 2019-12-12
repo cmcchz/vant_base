@@ -51,6 +51,7 @@
                     <van-notice-bar wrapable :scrollable="false" style="background-color: white;color:black;font-size: 12px">
                         <span style="color:#09c9ff">回复时间：</span>{{item.处理时间.slice(0,16)}}<br>
                         <span style="color:#09c9ff">处理内容：</span>{{item.处理内容}}<br>
+                        <span style="color:#09c9ff">发布内容：</span>{{item.发布内容}}<br>
                     </van-notice-bar>
                 </van-panel>
 
@@ -75,14 +76,24 @@
 
 
                 <van-panel title="审核处理内容" desc="" status="状态">
-                    <div>
+
+
+                    <van-cell-group>
                         <van-field
                                 v-model="handleResult"
                                 type="textarea"
-                                label="修改内容:"
-                                left-icon="contact"
+                                label="处理内容:"
+                                left-icon="chat-o"
+                                disabled
                         />
-                    </div>
+
+                        <van-field
+                                v-model="handlePublish"
+                                type="textarea"
+                                label="发布内容:"
+                                left-icon="chat-o"
+                        />
+                    </van-cell-group>
                     <div slot="footer">
                         <van-row>
                             <van-col span="8"><van-button type="info" size="small" @click="onConfirm" style="width: 100%;margin-right: 5px">通过</van-button></van-col>
@@ -276,6 +287,7 @@
                 centerResult:[],
                 orderResult:'',
                 handleResult:'',
+                handlePublish:'',
                 handle_docid:'',
                 show:false,
                 showDispatch:false,
@@ -529,6 +541,10 @@
                 */
                 if(this.my_user.角色.indexOf('调度')>=0){
                     this.handleResult=item.处理内容;
+                    if(item.发布内容==undefined || item.发布内容==null || item.发布内容.trim().length<=0)
+                        this.handlePublish=item.处理内容;
+                    else
+                        this.handlePublish=item.发布内容;
                     this.handle_docid=item.docId;
                     this.show=true;
                 }
@@ -551,7 +567,7 @@
 
                     let temp = {
                         '内容审核':'已通过',
-                        '处理内容':this.handleResult
+                        '发布内容':this.handlePublish
                     };
                     let para = { 'docid': this.handle_docid,parameters: JSON.stringify(temp)};
                     updateDocument(para).then((res) => {

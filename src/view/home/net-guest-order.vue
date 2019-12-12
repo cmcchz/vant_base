@@ -92,7 +92,7 @@
 
         <van-notice-bar wrapable :scrollable="false" left-icon="volume-o">
             （1）请同意获取定位信息。<br>
-            （2）无客户联系人时，请填写上报人联系信息。
+            （2）无客户联系人时，请填写下单人联系信息。
         </van-notice-bar>
 
         <section style="height: 10px"></section>
@@ -237,11 +237,10 @@
 
                 center_name_picker:'',
 
-
                 activeNames: ['1'],
                 list: [],
                 doc_list: [],
-                types: ['家客', '政企', '传动', '无优', '其他'],
+                types: ['家庭宽带', '政企业务', '无线网络', '传输线路', '其他'],
                 loading: false,
                 finished: false,
                 value1: 30,

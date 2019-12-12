@@ -46,8 +46,7 @@
             <van-divider>处理进展</van-divider>
             <van-steps direction="vertical" :active="0">
                 <van-step v-for="item in sub_doc_list" :key="item.docId">
-                    <h5>【{{item.处理中心}}】   {{item.填写时间.slice(5,16)}}</h5>
-                    <p>{{item.处理内容}}</p>
+                    <div>【{{item.处理时间.slice(5,16)}}】  {{item.发布内容}}</div>
                 </van-step>
             </van-steps>
         </van-popup>
@@ -207,7 +206,7 @@
                     this.sub_doc_list = res.data;
 
                     this.sub_doc_list.sort(function(a,b){
-                        return b['填写时间'] > a['填写时间'] ? 1 : -1;
+                        return b['处理时间'] > a['处理时间'] ? 1 : -1;
                     });
 
                 });

@@ -50,7 +50,7 @@ export default {
             tabbars: [
                 {
                     name: "net-guest-order",
-                    title: "网情上报",
+                    title: "下单",
                     icon: "home-o",
                     show:true,
                     value: ''

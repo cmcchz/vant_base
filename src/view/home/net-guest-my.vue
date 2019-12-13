@@ -203,7 +203,11 @@
                 };
                 let para = {formname:'网络客情_阶段回复',parameters: JSON.stringify(temp)};
                 getDocsByFormname(para).then((res) => {
-                    this.sub_doc_list = res.data;
+                    this.sub_doc_list = [];
+                    for(let i=0;i<res.data.length;i++){
+                        if(res.data[i].发布内容!=null && res.data[i].发布内容!=undefined && res.data[i].发布内容.trim().length>0)
+                            this.sub_doc_list.push(res.data[i]);
+                    }
 
                     this.sub_doc_list.sort(function(a,b){
                         return b['处理时间'] > a['处理时间'] ? 1 : -1;

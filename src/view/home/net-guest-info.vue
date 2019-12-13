@@ -154,14 +154,27 @@
                                 v-model="orderResult"
                                 rows="2"
                                 autosize
-                                label="内容："
+                                label="处理内容："
                                 type="textarea"
                                 placeholder="请填写处理内容"
                                 maxlength="500"
                                 show-word-limit
                         />
+                        <van-field
+                                v-model="orderPublish"
+                                rows="2"
+                                autosize
+                                label="发布内容："
+                                type="textarea"
+                                placeholder="请填写发布内容"
+                                maxlength="500"
+                                show-word-limit
+                        />
 
-
+                        <van-notice-bar :scrollable="false" wrapable left-icon="volume-o">
+                            （1）处理内容仅内部人员可看<br>
+                            （2）发布内容将推送给报单人，请谨慎填写
+                        </van-notice-bar>
                         <section style="height: 10px">
 
                         </section>
@@ -286,6 +299,7 @@
                 center_list:['基础网维护中心','传输动力中心','无线优化中心','家客支撑中心','政企支撑中心','市区网络部','仙游网络部','涵江网络部','秀屿网络部'],
                 centerResult:[],
                 orderResult:'',
+                orderPublish:'',
                 handleResult:'',
                 handlePublish:'',
                 handle_docid:'',
@@ -438,6 +452,7 @@
                     let temp = {
                         '处理中心': this.my_user.部门,
                         '处理内容': this.orderResult,
+                        '发布内容': this.orderPublish,
                         '处理时间': this.getTodayStr(),
                         '处理人姓名':this.my_user.姓名,
                         '联系方式': this.my_user.手机号码,
